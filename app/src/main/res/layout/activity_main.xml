@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     android:clickable="true"
+    android:focusable="true"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context="valeriykundas.booktracker.MainActivity">
 
-    <EditText
-        android:id="@+id/bookTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="book title"
-        android:textSize="30dp"
-        android:layout_marginBottom="30dp"
-        />
-
-    <TextView
-        android:id="@+id/stopwatch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00"
-        android:textSize="50dp"
-        />
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
+        android:id="@+id/main_activity_main_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/startButton"
+        <EditText
+            android:id="@+id/bookTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/start"
-            android:onClick="onStartButtonClick"
-            />
+            android:layout_marginBottom="30dp"
+            android:hint="@string/hint_book_title"
+            android:textSize="30sp" />
 
-        <Button
-            android:id="@+id/pauseButton"
+        <TextView
+            android:id="@+id/stopwatch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/pause"
-            android:onClick="onPauseButtonClick"
-            />
+            android:text="@string/stopwatch_starting_time"
+            android:textSize="50sp" />
 
-        <Button
-            android:id="@+id/stopButton"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/stop"
-            android:onClick="onStopButtonClick"
-            />
+            android:layout_height="wrap_content">
 
+            <Button
+                android:id="@+id/startButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:onClick="onStartButtonClick"
+                android:text="@string/start" />
+
+            <Button
+                android:id="@+id/pauseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:onClick="onPauseButtonClick"
+                android:text="@string/pause" />
+
+            <Button
+                android:id="@+id/stopButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:onClick="onStopButtonClick"
+                android:text="@string/stop" />
+
+        </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

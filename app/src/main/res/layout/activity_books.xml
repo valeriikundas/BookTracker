@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="valeriykundas.booktracker.BooksActivity">
 
-    <TextView
-        android:id="@+id/booksTableDemo"
-        />
+    <TableLayout
+        android:id="@+id/table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow android:id="@+id/headerRow">
+
+            <TextView
+                android:layout_marginRight="60dp"
+                android:padding="3dp"
+                android:text="Title" />
+
+            <TextView
+                android:layout_marginEnd="60dp"
+                android:padding="3dp"
+                android:text="Time" />
+
+            <TextView
+                android:padding="3dp"
+                android:text="Pages" />
+        </TableRow>
+    </TableLayout>
 
 </TableLayout>

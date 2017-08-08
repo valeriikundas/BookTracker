@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,21 +16,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private int minutes = 0;
     private int seconds = 0;
-
-    private enum StopwatchState {
-        STOPPED, RUNNING, PAUSED
-    }
     private StopwatchState stopwatchState = StopwatchState.STOPPED;
-
     private DatabaseHelper databaseHelper;
+
+    public static String convertToTimeFormat(int minutes, int seconds) {
+        return String.format(Locale.US, "%02d", minutes) + ":" + String.format(Locale.US, "%02d", seconds);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.startButton).setVisibility(View.GONE);
 
         stopwatchState = StopwatchState.RUNNING;
-        startOrContinueStopwatch(view);
+        startOrContinueStopwatch();
     }
 
     public void onPauseButtonClick(View view) {
@@ -97,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
 
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(databaseHelper.COLUMN_NAME_TITLE, bookTitle);
-        values.put(databaseHelper.COLUMN_NAME_MINUTES_SPENT, minutes);
-        values.put(databaseHelper.COLUMN_NAME_SECONDS_SPENT, seconds);
-        long newRowId = db.insert(databaseHelper.TABLE_NAME, null, values);
+        values.put(DatabaseHelper.COLUMN_NAME_TITLE, bookTitle);
+        values.put(DatabaseHelper.COLUMN_NAME_MINUTES_SPENT, minutes);
+        values.put(DatabaseHelper.COLUMN_NAME_SECONDS_SPENT, seconds);
+        db.insert(DatabaseHelper.TABLE_NAME, null, values);
 
         String text = "You have read " + bookTitle + " for " + timeSpent + " minutes";
         Toast toasty = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
@@ -109,12 +107,12 @@ public class MainActivity extends AppCompatActivity {
         et.setText("");
 
         TextView tv = findViewById(R.id.stopwatch);
-        tv.setText("00:00");
+        tv.setText(R.string.stopwatch_starting_time);
         minutes = 0;
         seconds = 0;
     }
 
-    private void startOrContinueStopwatch(View view) {
+    private void startOrContinueStopwatch() {
         final Timer timer = new Timer();
         //TODO refactor it so that it always runs on one thread without creating a new one
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -142,18 +140,14 @@ public class MainActivity extends AppCompatActivity {
         }, 0, 1000);
     }
 
-    public static String convertToTimeFormat(int minutes, int seconds) {
-        return String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
-    }
-
     private void hideSoftKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    private void onShowBooksButtonClick() {
-        Intent intent = new Intent(this, BooksActivity.class);
-        startActivity(intent);
+        try {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch (Exception e) {
+            Log.e("hiding keyboard", "InputMethodManager.hideSoftInputFromWindow");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -165,15 +159,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
-            case R.id.books:
-                onShowBooksButtonClick();
+            case R.id.action_show_books: {
+                intent = new Intent(this, BooksActivity.class);
+                startActivity(intent);
                 return true;
-            case R.id.settings:
-                Toast.makeText(getApplicationContext(), "help", Toast.LENGTH_SHORT).show();
+            }
+            case R.id.action_settings: {
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private enum StopwatchState {
+        STOPPED, RUNNING, PAUSED
     }
 }
