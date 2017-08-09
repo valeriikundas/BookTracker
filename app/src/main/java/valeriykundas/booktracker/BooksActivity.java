@@ -1,9 +1,14 @@
 package valeriykundas.booktracker;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -76,6 +81,9 @@ public class BooksActivity extends AppCompatActivity {
 
             table.addView(tr);
         }
+
+        Toolbar new_toolbar = findViewById(R.id.new_toolbar);
+        setSupportActionBar(new_toolbar);
     }
 
     @Override
@@ -84,22 +92,21 @@ public class BooksActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
-    }*/
+    }
 
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.action_main_page: {
+            case R.id.action_main_page:
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
-            }
             case R.id.action_show_books: {
                 intent = new Intent(this, BooksActivity.class);
                 startActivity(intent);
@@ -113,7 +120,5 @@ public class BooksActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }*/
-
-
+    }
 }
