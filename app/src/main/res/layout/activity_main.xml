@@ -9,6 +9,13 @@
     android:orientation="vertical"
     tools:context="valeriykundas.booktracker.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/new_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"></android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:id="@+id/main_activity_main_linear_layout"
         android:layout_width="match_parent"
