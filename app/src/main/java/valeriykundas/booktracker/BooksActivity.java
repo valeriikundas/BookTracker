@@ -75,10 +75,6 @@ public class BooksActivity extends AppCompatActivity {
             c2.setText(data.get(i).get(1));
             tr.addView(c2);
 
-            TextView c3 = new TextView(getApplicationContext());
-            c3.setText("clean column");
-            tr.addView(c3);
-
             table.addView(tr);
         }
 
@@ -109,11 +105,6 @@ public class BooksActivity extends AppCompatActivity {
                 return true;
             case R.id.action_show_books: {
                 intent = new Intent(this, BooksActivity.class);
-                startActivity(intent);
-                return true;
-            }
-            case R.id.action_settings: {
-                intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
             }

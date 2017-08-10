@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_main"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".MainActivity">
@@ -23,10 +23,6 @@
         <activity
             android:name=".BooksActivity"
             android:label="Books"></activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
     </application>
 
 </manifest>

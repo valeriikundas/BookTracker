@@ -6,17 +6,11 @@
         android:id="@+id/action_main_page"
         android:icon="@drawable/main_page"
         android:title="@string/main_page"
-        app:showAsAction="always" />
+	    app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_show_books"
         android:icon="@drawable/books"
         android:title="@string/books"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/settings"
-        android:title="@string/settings"
         app:showAsAction="ifRoom" />
 </menu>

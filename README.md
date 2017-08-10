@@ -2,7 +2,6 @@
 This app helps you to track your readings.
 
 ##TODO##
-- [x] TODO add this list to github
 - [ ] TODO make beautiful books table
 - [ ] TODO concatenate book if such book is already in database
 - [ ] TODO create list of times when you read specific book

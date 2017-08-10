@@ -3,6 +3,7 @@ package valeriykundas.booktracker;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(new_toolbar);
     }
 
-    public void onStartButtonClick(View view) {
+    public void onStartButtonClick() {
         String bookName = ((EditText)findViewById(R.id.bookTitle)).getText().toString();
         if (bookName.equals("")) {
             Toast toasty = Toast.makeText(getApplicationContext(), "Please enter book title", Toast.LENGTH_SHORT);
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         startOrContinueStopwatch();
     }
 
-    public void onPauseButtonClick(View view) {
+    public void onPauseButtonClick() {
         findViewById(R.id.pauseButton).setVisibility(View.GONE);
         findViewById(R.id.stopButton).setVisibility(View.VISIBLE);
         findViewById(R.id.startButton).setVisibility(View.VISIBLE);
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         stopwatchState = StopwatchState.PAUSED;
     }
 
-    public void onStopButtonClick(View view) {
+    public void onStopButtonClick() {
         findViewById(R.id.stopwatch).setVisibility(View.GONE);
         findViewById(R.id.pauseButton).setVisibility(View.GONE);
         findViewById(R.id.stopButton).setVisibility(View.GONE);
@@ -97,12 +99,69 @@ public class MainActivity extends AppCompatActivity {
         String bookTitle = et.getText().toString();
         String timeSpent = convertToTimeFormat(minutes, seconds);
 
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_NAME_TITLE, bookTitle);
-        values.put(DatabaseHelper.COLUMN_NAME_MINUTES_SPENT, minutes);
-        values.put(DatabaseHelper.COLUMN_NAME_SECONDS_SPENT, seconds);
-        db.insert(DatabaseHelper.TABLE_NAME, null, values);
+        //check if such book is already in database
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        String[] projection = {DatabaseHelper.COLUMN_NAME_ID, DatabaseHelper.COLUMN_NAME_TITLE, DatabaseHelper.COLUMN_NAME_MINUTES_SPENT, DatabaseHelper.COLUMN_NAME_SECONDS_SPENT};
+        String whereClause = DatabaseHelper.COLUMN_NAME_TITLE + " = ?";
+        String[] whereArgs = {bookTitle};
+        Cursor cursor = db.query(DatabaseHelper.TABLE_NAME, projection, whereClause, whereArgs, null, null, null, null);
+
+        Vector<BookInfo> booksWithGivenName = new Vector<>();
+        while (cursor.moveToNext()) {
+            String title = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME_TITLE));
+            long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME_ID));
+            int minutesSpentAlready = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME_MINUTES_SPENT));
+            int secondsSpentAlready = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME_SECONDS_SPENT));
+            BookInfo bookInfo = new BookInfo(title, minutesSpentAlready, secondsSpentAlready);
+
+            booksWithGivenName.add(bookInfo);
+        }
+        cursor.close();
+
+        if (booksWithGivenName.size() > 1) {
+            Toast.makeText(getApplicationContext(), "more than one book with same title", Toast.LENGTH_SHORT).show();
+
+            int minutesAll = 0, secondsAll = 0;
+            for (int i = 0; i < booksWithGivenName.size(); ++i) {
+                minutesAll += booksWithGivenName.get(i).minutes;
+                secondsAll += booksWithGivenName.get(i).seconds;
+            }
+            minutesAll += secondsAll / 60;
+            secondsAll %= 60;
+
+            BookInfo bookInfo = new BookInfo(booksWithGivenName.firstElement().title, minutesAll, secondsAll);
+
+            whereClause = DatabaseHelper.COLUMN_NAME_TITLE + " = ?";
+            whereArgs = new String[]{bookInfo.title};
+            db.delete(DatabaseHelper.TABLE_NAME, whereClause, whereArgs);
+
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHelper.COLUMN_NAME_TITLE, bookInfo.title);
+            values.put(DatabaseHelper.COLUMN_NAME_MINUTES_SPENT, bookInfo.minutes);
+            values.put(DatabaseHelper.COLUMN_NAME_SECONDS_SPENT, bookInfo.seconds);
+            db.insert(DatabaseHelper.TABLE_NAME, null, values);
+        } else if (booksWithGivenName.size() == 1) {
+            BookInfo bookInfo = booksWithGivenName.firstElement();
+
+            db = databaseHelper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHelper.COLUMN_NAME_TITLE, bookTitle);
+            values.put(DatabaseHelper.COLUMN_NAME_MINUTES_SPENT, minutes + bookInfo.minutes);
+            values.put(DatabaseHelper.COLUMN_NAME_SECONDS_SPENT, seconds + bookInfo.seconds);
+
+            whereClause = DatabaseHelper.COLUMN_NAME_TITLE + " = ?";
+            whereArgs = new String[]{String.valueOf(bookInfo.title)};
+
+            db.update(DatabaseHelper.TABLE_NAME, values, whereClause, whereArgs);
+        } else {
+            db = databaseHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHelper.COLUMN_NAME_TITLE, bookTitle);
+            values.put(DatabaseHelper.COLUMN_NAME_MINUTES_SPENT, minutes);
+            values.put(DatabaseHelper.COLUMN_NAME_SECONDS_SPENT, seconds);
+            db.insert(DatabaseHelper.TABLE_NAME, null, values);
+        }
 
         String text = "You have read " + bookTitle + " for " + timeSpent + " minutes";
         Toast toasty = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
@@ -118,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void startOrContinueStopwatch() {
         final Timer timer = new Timer();
-        //TODO refactor it so that it always runs on one thread without creating a new one
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -174,11 +232,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             }
-            case R.id.action_settings: {
-                intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -186,5 +239,17 @@ public class MainActivity extends AppCompatActivity {
 
     private enum StopwatchState {
         STOPPED, RUNNING, PAUSED
+    }
+
+    class BookInfo {
+        public String title;
+        public int minutes;
+        public int seconds;
+
+        BookInfo(String title, int minutes, int seconds) {
+            this.title = title;
+            this.minutes = minutes;
+            this.seconds = seconds;
+        }
     }
 }
