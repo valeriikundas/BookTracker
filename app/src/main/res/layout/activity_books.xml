@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TableRow android:id="@+id/headerRow">
+	    <TableRow android:id="@+id/headerRow">
 
             <TextView
                 android:layout_marginEnd="60dp"

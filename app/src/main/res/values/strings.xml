@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BookTracker</string>
+	<string name="app_name">BookTime</string>
     <string name="start">Start</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
