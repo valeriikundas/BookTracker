@@ -32,7 +32,8 @@ public class BooksActivity extends AppCompatActivity {
                 DatabaseHelper.COLUMN_NAME_ID,
                 DatabaseHelper.COLUMN_NAME_TITLE,
                 DatabaseHelper.COLUMN_NAME_MINUTES_SPENT,
-                DatabaseHelper.COLUMN_NAME_SECONDS_SPENT
+                DatabaseHelper.COLUMN_NAME_SECONDS_SPENT,
+                DatabaseHelper.COLUMN_NAME_CURRENT_PAGE
         };
 
         Cursor cursor = db.query(DatabaseHelper.TABLE_NAME, projection, null, null, null, null, null);
@@ -43,15 +44,18 @@ public class BooksActivity extends AppCompatActivity {
                 int indexOfBookTitleColumn = cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME_TITLE);
                 int indexOfMinutesSpentColumn = cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME_MINUTES_SPENT);
                 int indexOfSecondsSpendColumn = cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME_SECONDS_SPENT);
+                int indexOfCurPageColumn = cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_NAME_CURRENT_PAGE);
 
                 int minutes = Integer.valueOf(cursor.getString(indexOfMinutesSpentColumn));
                 int seconds = Integer.valueOf(cursor.getString(indexOfSecondsSpendColumn));
                 String time = MainActivity.convertToTimeFormat(minutes, seconds);
                 String title = cursor.getString(indexOfBookTitleColumn);
+                String currentPage = String.valueOf(cursor.getInt(indexOfCurPageColumn));
 
                 Vector<String> tableRow = new Vector<>();
                 tableRow.add(title);
                 tableRow.add(time);
+                tableRow.add(currentPage);
 
                 data.add(tableRow);
 
@@ -60,26 +64,28 @@ public class BooksActivity extends AppCompatActivity {
         }
         cursor.close();
 
-        TableLayout table = findViewById(R.id.table);
+        fillTableWithData(R.id.table, data);
+
+        Toolbar new_toolbar = findViewById(R.id.new_toolbar);
+        setSupportActionBar(new_toolbar);
+    }
+
+    private void fillTableWithData(int tableId, Vector<Vector<String>> data) {
+        TableLayout table = findViewById(tableId);
         for (int i = 0; i < data.size(); ++i) {
             TableRow tr = new TableRow(getApplicationContext());
             tr.setLayoutParams(new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            TextView c1 = new TextView(getApplicationContext());
-            c1.setText(data.get(i).get(0));
-            tr.addView(c1);
-
-            TextView c2 = new TextView(getApplicationContext());
-            c2.setText(data.get(i).get(1));
-            tr.addView(c2);
-
+                    ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            TextView cell;
+            for (int j = 0; j < data.get(0).size(); ++j) {
+                cell = new TextView(getApplicationContext());
+                cell.setText(data.get(i).get(j));
+                cell.setPadding(10, 10, 10, 10);
+                tr.addView(cell);
+            }
             table.addView(tr);
         }
-
-        Toolbar new_toolbar = findViewById(R.id.new_toolbar);
-        setSupportActionBar(new_toolbar);
     }
 
     @Override

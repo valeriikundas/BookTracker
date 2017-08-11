@@ -11,4 +11,5 @@
     <string name="title">Title</string>
     <string name="time">Time</string>
     <string name="pages">Pages</string>
+    <string name="currentpage">Page</string>
 </resources>
