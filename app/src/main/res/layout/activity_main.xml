@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:background="@color/colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical"
+	android:orientation="vertical"
     tools:context="valeriykundas.booktracker.MainActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/new_toolbar"
+		android:id="@+id/main_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
 	    android:background="@color/colorPrimary">
@@ -18,14 +19,14 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/main_activity_main_linear_layout"
+		android:id="@+id/main_linlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
 
 	    <ImageButton
-		    android:id="@+id/imagebutton"
+			android:id="@+id/main_imbtn_addimage"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:onClick="onImageButtonClick"
@@ -33,13 +34,13 @@
 		    android:visibility="gone" />
 
 	    <ImageView
-		    android:id="@+id/image"
+			android:id="@+id/main_iv_cover"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:visibility="gone" />
 
 	    <AutoCompleteTextView
-		    android:id="@+id/booktitle"
+			android:id="@+id/main_actv_booktitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
@@ -50,13 +51,14 @@
             android:textSize="30sp" />
 
 		<EditText
-			android:id="@+id/curpage"
+			android:id="@+id/main_et_curpage"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:gravity="center"
 			android:hint="@string/currentpage"/>
 
 		<TextView
-            android:id="@+id/stopwatch"
+			android:id="@+id/main_tv_stopwatch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stopwatch_starting_time"
@@ -67,7 +69,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/startButton"
+				android:id="@+id/main_btn_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -75,7 +77,7 @@
                 android:text="@string/start" />
 
             <Button
-                android:id="@+id/pauseButton"
+				android:id="@+id/main_btn_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -83,7 +85,7 @@
                 android:text="@string/pause" />
 
             <Button
-                android:id="@+id/stopButton"
+				android:id="@+id/main_btn_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"

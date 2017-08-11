@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper {
     public final static int DATABASE_VERSION = 1;
     public final static String DATABASE_FILENAME = "data.db";
     public final static String TABLE_NAME = "books";
@@ -26,14 +26,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_NAME_BOOK_COVER_IMAGE_PATH + " TEXT" +
                     ")";
     private final static String SQL_DELETE_TABLES = "DELETE TABLE IF EXISTS " + TABLE_NAME;
-    private static DatabaseHelper instance = null;
-    private DatabaseHelper(Context context) {
+    private static DBHelper instance = null;
+
+    private DBHelper(Context context) {
         super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
     }
 
-    public static DatabaseHelper getInstance(Context context) {
+    public static DBHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new DatabaseHelper(context);
+            instance = new DBHelper(context);
         }
         return instance;
     }

@@ -8,8 +8,7 @@
     <string name="hint_book_title">book title</string>
     <string name="stopwatch_starting_time">00:00</string>
     <string name="main_page">main page</string>
+    <string name="currentpage">page</string>
     <string name="title">title</string>
     <string name="time">time</string>
-    <string name="pages">pages</string>
-    <string name="currentpage">page</string>
 </resources>
