@@ -21,15 +21,15 @@ import java.util.Vector;
 
 public class BooksActivity extends AppCompatActivity {
 
+    public static final int REQUEST_FOR_EDITING_BOOK = 1010;
     private DBHelper dbHelper;
-
     private String[] fullProjection = {
             DBHelper.COLUMN_NAME_ID,
             DBHelper.COLUMN_NAME_TITLE,
             DBHelper.COLUMN_NAME_MINUTES_SPENT,
             DBHelper.COLUMN_NAME_SECONDS_SPENT,
             DBHelper.COLUMN_NAME_CURRENT_PAGE,
-            DBHelper.COLUMN_NAME_PAGES_ALL_COUNT,
+            DBHelper.COLUMN_NAME_PAGE_COUNT,
     };
 
     @Override
@@ -88,10 +88,10 @@ public class BooksActivity extends AppCompatActivity {
         TableRow header = new TableRow(getApplicationContext());
         header.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         TextView cell;
-        String[] columnNames = {getResources().getString(R.string.title), getResources().getString(R.string.time), getResources().getString(R.string.currentpage), ""};
+        String[] columnNames = {getResources().getString(R.string.title), getResources().getString(R.string.time), getResources().getString(R.string.current_page), ""};
         for (int i = 0; i < columnNames.length; ++i) {
             cell = new TextView(getApplicationContext());
-            cell.setText(R.string.title);
+            cell.setText(columnNames[i]);
             cell.setPadding(10, 10, 10, 10);
             header.addView(cell);
         }
@@ -127,7 +127,30 @@ public class BooksActivity extends AppCompatActivity {
             });
 
             tr.addView(imb);
+            //final BooksActivity this_ref = this;
+            tr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), BookEditActivity.class);
+                    intent.putExtra("title", bookTitle);
+                    startActivityForResult(intent, REQUEST_FOR_EDITING_BOOK);
+                }
+            });
             table.addView(tr);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_FOR_EDITING_BOOK) {
+            if (resultCode == RESULT_OK) {
+//                String new_title = data.getStringExtra("title");
+//                String author = data.getStringExtra("author");
+                //              int current_page = data.getIntExtra("current_page");
+                //            int page_count = data.getIntExtra("page_count");
+                //          String cover_path = data.getStringExtra("image_path");
+                //TODO update database with this result
+            }
         }
     }
 

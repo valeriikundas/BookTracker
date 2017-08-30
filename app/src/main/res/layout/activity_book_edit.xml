@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="valeriykundas.booktracker.BookEditActivity">
+
+    <ImageView
+        android:id="@+id/edit_imgv_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorPrimary"
+        android:minHeight="161dp"
+        android:minWidth="100dp" />
+
+    <EditText
+        android:id="@+id/edit_et_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/title"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/edit_et_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/author"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/edit_et_curpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/current_page"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/edit_et_pagecount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/page_count"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/edit_btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/save" />
+
+</LinearLayout>
